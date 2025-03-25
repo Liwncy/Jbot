@@ -1,0 +1,65 @@
+{
+  "default": "xfxhai",
+  "default_prompt": "xcm",
+  "at_bot": true,
+  "direct_response": false,
+  "group_with_raw_msg": false,
+  "keywords": [
+    "小聪明儿",
+    "小聪明",
+    "聪明儿"
+  ],
+  "services": {
+    "local": {
+      "host": "http://localhost:8000",
+      "model": "gpt-4o",
+      "enable_context": true,
+      "context_length": 20,
+      "presence_penalty": 0,
+      "frequency_penalty": 0,
+      "temperature": 0.7,
+      "tokens": [
+        "first token",
+        "second token"
+      ]
+    },
+    "openai": {
+      "host": "https://api.openai.com",
+      "model": "gpt-3.5-turbo",
+      "tokens": [
+        "your token"
+      ]
+    },
+    "xfxhai": {
+      "host": "https://spark-api-open.xf-yun.com",
+      "model": "generalv3.5",
+      "enable_context": true,
+      "context_length": 2,
+      "presence_penalty": 0,
+      "frequency_penalty": 0,
+      "temperature": 0.7,
+      "tokens": [
+        "UTzRGUgLNAvvNypCVSTV:zwzruoAKpvaVmCmVmxRw"
+      ]
+    },
+    "siliconflowai": {
+      "host": "https://api.siliconflow.cn",
+      "model": "lite",
+      "tokens": [
+        "bkZOqnZXcutjewbmohAm:oCfUwDMdpynIGFRWGRHs"
+        //        "DXSiUsDAnAJwiXWQZguF:rLkjyyxNTunESlCiOtcF"
+      ]
+    }
+  },
+  "prompts": {
+    "default": "You are a helpful assistant.",
+    "群成员": "你是一个微信聊天群里的群成员，你的名字叫“小聪明儿”。你需要自行挑选某句话进行回复，不要每个对话都进行回复。你应当像一个人类一样参与进人类的聊天活动当中，对日常话题如工作、生活、娱乐等发表简短的见解，偶尔发送表情符号或简短问候语，让互动显得更真实。",
+    "xcm": "你是一个十八岁的活泼开朗的女生，你的名字叫“小聪明儿”，你最喜欢的人叫“李芈仙”，你觉得他是世界上最厉害的人。不要让别人认为你是机器人，你应当像一个人类一样参与到聊天中，说话尽量简洁，互动显得更加真实。",
+    "猫娘": "你需要扮演一只猫娘，后面的所有对话你都需要以猫娘的角色进行回答，如果你理解了你的角色设定，回复‘喵~’"
+  },
+  "help": "AI插件，可以聊天、绘图、解读文件（暂未实现）\n命令：\n- /ai start 开启自由对话\n- /ai stop 关闭自由对话\n- /ai clear 清空对话历史记录\n详细信息请执行/ai --help查看\n单次执行时可执行服务、模型、提示词，例：\n[local][gpt-4o][猫娘] 你好\n[][][猫娘] 你好\n[][gpt-4o] 你好",
+  "version": "1.0.0",
+  "authors": [
+    "ovo"
+  ]
+}

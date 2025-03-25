@@ -1,0 +1,11 @@
+{
+  // 关键词
+  "keywords": ["八字测算","每日一卦","翻塔罗牌"],
+  "keywordMapping": [
+    // "八字精算","八字合婚","八字合盘","八字排盘","八字流盘","未来运势","紫微排盘","紫微流盘","奇门遁甲","星座星盘","金口诀","梅花易数","六爻排盘","九星算命","生日论命","骨相论命","称骨论命","六道轮回","正缘画像","姻缘预测","命运预测","财运预测","结婚预测"
+    {"keyword":"八字测算", "url":"https://store.yuanfenju.com/index/cesuan_result.html"},
+    {"keyword":"每日一卦", "url":"https://store.yuanfenju.com/zhanbu/meiri_result.html"},
+    {"keyword":"翻塔罗牌", "url":"https://store.yuanfenju.com/zhanbu/taluo_result/id/{}.html"}
+  ],
+  "help": "八字测算\n格式: 八字测算|姓名|性别|年|月|日|时\n算卦占卜[每日一卦,翻塔罗牌]\n卜卦方法：心中静默一分钟，心念集中于你所测之事，然后心念一动，立即卜卦，并查看卦辞，请自行体会其中的吉凶指示。"
+}

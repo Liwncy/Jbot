@@ -26,17 +26,17 @@ public enum MessageServiceImpl implements MessageService {
     @Override
     public Future<SentMessage> sendText(TextMessage message) {
         var content = message.getContent();
-        if (StrUtil.isNotBlank(message.getAts())) {
-            ContactManager manager = Context.get().getContactManager();
-            var ats = Arrays.stream(message.getAts().split(","))
-                    .map(String::trim)
-                    .map(manager::get)
-                    .map(Contactable::getNickname)
-                    .map(nickname -> "@" + nickname)
-                    .reduce(String::concat)
-                    .orElse("");
-            content = ats + " " + content;
-        }
+//        if (StrUtil.isNotBlank(message.getAts())) {
+//            ContactManager manager = Context.get().getContactManager();
+//            var ats = Arrays.stream(message.getAts().split(","))
+//                    .map(String::trim)
+//                    .map(manager::get)
+//                    .map(Contactable::getNickname)
+//                    .map(nickname -> "@" + nickname)
+//                    .reduce(String::concat)
+//                    .orElse("");
+//            content = ats + " " + content;
+//        }
         JsonObject body = JsonObject.of(
                 "toWxid", message.getReceiver().getId(),
                 "content", content,

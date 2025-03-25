@@ -1,0 +1,7 @@
+{
+  "name": "xuanxue",
+  "main": "x.ovo.jbot.plugin.xuanxue.XuanxuePlugin",
+  "version": "1.0.0",
+  "description": "玄学测算(测试中)",
+  "authors": ["Liwncy"]
+}

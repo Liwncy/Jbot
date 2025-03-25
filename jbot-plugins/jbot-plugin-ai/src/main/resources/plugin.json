@@ -1,0 +1,7 @@
+{
+  "name": "ai",
+  "main": "x.ovo.jbot.plugin.ai.AiPlugin",
+  "version": "1.0.0",
+  "description": "ai",
+  "authors": ["ovo"]
+}

@@ -26,11 +26,11 @@ public class KfcListener extends EventListener<MessageEvent<TextMessage>, TextMe
 
     public KfcListener(Plugin plugin) {
         super(plugin);
-        try (var is = plugin.getClassLoader().getResourceAsStream("doc.json")) {
-            if (is != null) {
-                doc = Buffer.buffer(is.readAllBytes()).toJsonArray();
-            }
-        } catch (Exception ignore){}
+//        try (var is = plugin.getClassLoader().getResourceAsStream("doc.json")) {
+//            if (is != null) {
+//                doc = Buffer.buffer(is.readAllBytes()).toJsonArray();
+//            }
+//        } catch (Exception ignore){}
     }
 
     @Override
@@ -40,8 +40,8 @@ public class KfcListener extends EventListener<MessageEvent<TextMessage>, TextMe
 
     @Override
     public boolean onEvent(@NonNull MessageEvent<TextMessage> event, TextMessage source) {
-        var res = HttpUtil.get("https://kfc-crazy-thursday.vercel.app/api/index");
-        source.getSender().send(StrUtil.defaultIfBlank(res, doc.getString(RANDOM.nextInt(doc.size()))));
+        var res = HttpUtil.get("https://vme.im/api?format=text");
+        source.getSender().send(res);
         return true;
     }
 }

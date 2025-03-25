@@ -1,0 +1,7 @@
+{
+  "name": "cpdd",
+  "main": "x.ovo.jbot.plugin.cpdd.CpddPlugin",
+  "version": "1.0.0",
+  "description": "Cpdd 找情缘",
+  "authors": ["Liwncy"]
+}

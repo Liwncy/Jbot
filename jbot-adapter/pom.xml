@@ -16,7 +16,6 @@
 
     <modules>
         <module>jbot-adapter-gewe</module>
-        <module>jbot-adapter-native</module>
         <module>jbot-adapter-apad</module>
     </modules>
 

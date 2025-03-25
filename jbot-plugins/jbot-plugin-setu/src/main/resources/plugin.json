@@ -1,0 +1,7 @@
+{
+  "name": "setu",
+  "main": "x.ovo.jbot.plugin.setu.SetuPlugin",
+  "version": "1.0.0",
+  "description": "随机发送色色图片和视频",
+  "authors": ["ovo"]
+}

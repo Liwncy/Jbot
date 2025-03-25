@@ -22,6 +22,10 @@
         <module>jbot-plugin-onset</module>
         <module>jbot-plugin-epic</module>
         <module>jbot-plugin-music</module>
+        <module>jbot-plugin-ai</module>
+        <module>jbot-plugin-cpdd</module>
+        <module>jbot-plugin-setu</module>
+        <module>jbot-plugin-xuanxue</module>
     </modules>
 
     <dependencies>
