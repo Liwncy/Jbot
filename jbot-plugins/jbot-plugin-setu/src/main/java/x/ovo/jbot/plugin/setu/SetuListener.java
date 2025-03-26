@@ -36,6 +36,7 @@ public class SetuListener extends EventListener<MessageEvent<TextMessage>, TextM
     private static final String BAISI_URL = "https://v2.api-m.com/api/baisi?return=302";
     private static final String GIRL_VIDEO_URL = "https://v0-1.qqsuu.cn/xjj/{}.mp4";
     private static final String BOY_URL = "https://api.52vmy.cn/api/img/tu/boy?type=text";
+    private static final String BOY_URL1 = "https://api.yujn.cn/api/boy.php?";
     private static final List<String> IMG_KEYWORD = List.of("plmm", "漂亮妹妹", "来点美女");
     private static final String SEARCH_IMG_URL = "https://image.so.com/i?src=&inact=0&q=";
 
@@ -77,8 +78,10 @@ public class SetuListener extends EventListener<MessageEvent<TextMessage>, TextM
                 url = BAISI_URL;
             } else if ("看看腿".equals(content)) {
                 url = Instant.now().getEpochSecond() % 2 == 0 ? HEISI_URL : BAISI_URL;
-            } else if ("来点帅哥".equals(content)) {
+            } else if ("看看帅哥".equals(content)) {
                 url = HttpUtil.get(BOY_URL);
+            } else if ("来点帅哥".equals(content)) {
+                url = HttpUtil.get(BOY_URL1);
             } else if (content.startsWith("来点")) {
                 content = StrUtil.removePrefix(content, "来点");
                 String s = HttpUtil.get(SEARCH_IMG_URL + content);

@@ -2,6 +2,7 @@
   "default": "xfxhai",
   "default_prompt": "xcm",
   "at_bot": true,
+  "random_response": true,
   "direct_response": false,
   "group_with_raw_msg": false,
   "keywords": [

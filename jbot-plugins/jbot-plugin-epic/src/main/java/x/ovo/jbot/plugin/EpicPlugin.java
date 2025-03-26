@@ -44,7 +44,9 @@ public class EpicPlugin extends Plugin {
                             .forEach(data -> {
                                 var msg = new LinkMessage();
                                 msg.setTitle(data.getString("title"));
-                                msg.setThumbUrl(data.getString("cover"));
+                                // 图片大小超出：51200byte
+                                // msg.setThumbUrl(data.getString("cover"));
+                                msg.setThumbUrl("https://bkimg.cdn.bcebos.com/pic/0dd7912397dda14478a7d273beb7d0a20df48641");
                                 msg.setDesc(data.getString("description"));
                                 msg.setUrl(data.getString("link"));
                                 source.getSender().send(msg);

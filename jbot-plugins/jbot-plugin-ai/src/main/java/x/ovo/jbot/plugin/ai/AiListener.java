@@ -62,16 +62,19 @@ public class AiListener extends x.ovo.jbot.core.event.EventListener<MessageEvent
 
     @Override
     public boolean support(@NonNull MessageEvent<TextMessage> event, TextMessage message) {
+        if (message.getSender() == null || (message.getSender().getType() != ContactType.FRIEND && message.getSender().getType() != ContactType.GROUP)) {
+            return false;
+        }
         // 是否直接响应消息
         Boolean directResponse = MapUtil.getBool(this.config, "direct_response", false);
         if (directResponse) return true;
+        // 是否随机响应消息
+        Boolean randomResponse = MapUtil.getBool(this.config, "random_response", false);
+        if (randomResponse && new Random().nextDouble() < 0.05) return true;
 
         // 是否响应艾特消息，如果是，则响应私聊信息和群聊艾特消息
         Boolean atMe = MapUtil.getBool(this.config, "at_bot", false);
         if (atMe && (!message.isGroup() || StrUtil.isNotEmpty(message.getAts()) || StrUtil.equals("小聪明儿", message.getAts()))) {
-            if (message.getSender().getType() != ContactType.FRIEND && message.getSender().getType() != ContactType.GROUP) {
-                return false;
-            }
             if (message.isGroup()) {
                 // 群聊内@消息，需要去掉@bot的部分
                 String regex = StrUtil.format("@({}|{})\\s?", message.getReceiver().getNickname(), StrUtil.defaultIfBlank(((Member) message.getReceiver()).getDisplayName(), "null"));

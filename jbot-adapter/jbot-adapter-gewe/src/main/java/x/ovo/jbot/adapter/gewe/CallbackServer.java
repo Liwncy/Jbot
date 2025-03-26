@@ -27,7 +27,7 @@ public class CallbackServer {
                     req.response().end();
                     if (!data.containsKey("data") && !data.containsKey("Data")) return;
                     // 拒收历史消息
-                    if(System.currentTimeMillis()/1000 - data.getJsonObject("Data").getLong("CreateTime") >= 100)
+                    if (data.getJsonObject("Data").containsKey("CreateTime") && System.currentTimeMillis() / 1000 - data.getJsonObject("Data").getLong("CreateTime") >= 100)
                         return;
                     Optional.ofNullable(manager).orElseGet(() -> {
                         var m = Context.get().getMessageManager();

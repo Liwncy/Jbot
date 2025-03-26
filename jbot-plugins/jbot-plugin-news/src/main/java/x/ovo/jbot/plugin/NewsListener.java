@@ -87,7 +87,10 @@ public class NewsListener extends EventListener<MessageEvent<TextMessage>, TextM
     private Consumer<TextMessage> video() {
         return message -> {
             var img = new VideoMessage();
+            var url = Buffer.buffer(HttpUtil.get(RILI_URL)).toJsonObject().getString("url");
             img.setFileUrl(VIDEO_URL);
+            img.setThumbUrl(url);
+            img.setDuration(14);
             img.send(message.getSender()).onComplete(ar -> log.info("发送 视频日报 {}", ar.succeeded() ? "成功" : "失败"));
         };
     }
