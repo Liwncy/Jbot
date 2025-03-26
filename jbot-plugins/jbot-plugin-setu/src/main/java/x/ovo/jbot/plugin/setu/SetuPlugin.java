@@ -21,11 +21,11 @@ public class SetuPlugin extends Plugin {
     @Override
     public void onLoad() {
         // 设置hutool-http使用jdk的httpclient实现，避免302无法重定向，hutool后续的新版本有可能会解决此问题
-        Singleton.get(ClientEngine.class.getName(), () -> {
-            ClientEngine engine = ClientEngineFactory.createEngine(JdkClientEngine.class.getSimpleName());
-            engine.init(ClientConfig.of().setFollowRedirects(true));
-            return engine;
-        });
+//        Singleton.get(ClientEngine.class.getName(), () -> {
+//            ClientEngine engine = ClientEngineFactory.createEngine(JdkClientEngine.class.getSimpleName());
+//            engine.init(ClientConfig.of().setFollowRedirects(true));
+//            return engine;
+//        });
     }
 
     @Override

@@ -36,6 +36,7 @@
         <ver.junit>5.10.3</ver.junit>
         <ver.javacv>1.5.11</ver.javacv>
         <ver.ffmpeg>7.1</ver.ffmpeg>
+        <ver.jsoup>1.19.1</ver.jsoup>
 
 
         <easyj-maven-plugin.version>1.1.5</easyj-maven-plugin.version>

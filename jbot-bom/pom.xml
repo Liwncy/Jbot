@@ -108,6 +108,12 @@
                 <version>${ver.ffmpeg}-${ver.javacv}</version>
                 <classifier>${build.platform}</classifier>
             </dependency>
+            <!-- jsoup HTML parser library @ https://jsoup.org/ -->
+            <dependency>
+                <groupId>org.jsoup</groupId>
+                <artifactId>jsoup</artifactId>
+                <version>${ver.jsoup}</version>
+            </dependency>
 
             <!-- 单元测试 -->
             <dependency>
