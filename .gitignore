@@ -40,5 +40,6 @@ build/
 
 config/
 adapter/
-plugin/
+plugin/**/*.json5
+plugin/*.jar
 log/

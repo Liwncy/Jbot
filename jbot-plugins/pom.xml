@@ -26,6 +26,7 @@
         <module>jbot-plugin-cpdd</module>
         <module>jbot-plugin-setu</module>
         <module>jbot-plugin-xuanxue</module>
+        <module>jbot-plugin-mmorpg</module>
     </modules>
 
     <dependencies>

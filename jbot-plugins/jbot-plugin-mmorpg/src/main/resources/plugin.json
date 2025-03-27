@@ -1,0 +1,7 @@
+{
+  "name": "mmorpg",
+  "main": "x.ovo.jbot.plugin.mmorpg.MmorpgPlugin",
+  "version": "1.0.0",
+  "description": "小型多人在线角色扮演游戏",
+  "authors": ["liwncy"]
+}
