@@ -10,6 +10,7 @@ import org.dromara.hutool.core.codec.binary.Base64;
 import x.ovo.jbot.core.Context;
 import x.ovo.jbot.core.common.exception.ApiException;
 
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -20,10 +21,8 @@ public class ApiUtil {
 
     static {
         var options = new HttpClientOptions()
-//                .setDefaultHost(Optional.ofNullable(APadAdapter.getConfig().getString("host")).orElse("127.0.0.1"))
-//                .setDefaultPort(Optional.ofNullable(APadAdapter.getConfig().getInteger("port")).orElse(9000))
-                .setDefaultHost("127.0.0.1")
-                .setDefaultPort(9000)
+                .setDefaultHost(Optional.ofNullable(APadAdapter.getConfig().getString("host")).orElse("127.0.0.1"))
+                .setDefaultPort(Optional.ofNullable(APadAdapter.getConfig().getInteger("port")).orElse(9000))
                 .setSsl(false)
                 .setTcpKeepAlive(true)
                 .setTcpNoDelay(true)

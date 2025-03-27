@@ -2,17 +2,18 @@ package x.ovo.jbot.impl;
 
 import io.vertx.core.Future;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.hutool.core.spi.ServiceLoader;
-import org.dromara.hutool.core.spi.SpiUtil;
+import org.dromara.hutool.core.text.StrUtil;
 import org.dromara.hutool.core.thread.ThreadUtil;
 import x.ovo.jbot.core.Context;
 import x.ovo.jbot.core.JBot;
 import x.ovo.jbot.core.JBotConfig;
 import x.ovo.jbot.core.adapter.Adapter;
 import x.ovo.jbot.core.common.constant.JBotFiles;
+import x.ovo.jbot.core.common.exception.AdapterException;
 import x.ovo.jbot.core.common.util.ContactUtil;
 import x.ovo.jbot.core.contact.Friend;
 import x.ovo.jbot.impl.command.DefaultCommandManager;
+import x.ovo.jbot.impl.config.SpiClassLoader;
 import x.ovo.jbot.impl.contact.DefaultContactManager;
 import x.ovo.jbot.impl.contact.NickNameStrategy;
 import x.ovo.jbot.impl.contact.RemarkStrategy;
@@ -22,7 +23,7 @@ import x.ovo.jbot.impl.message.DefaultMessageManager;
 import x.ovo.jbot.impl.plugin.DebugPluginManager;
 import x.ovo.jbot.impl.plugin.DefaultPluginManager;
 
-import java.util.Optional;
+import java.util.ServiceLoader;
 
 /**
  * JBot 实现
@@ -38,8 +39,16 @@ public class JBotImpl implements JBot {
         // 加载配置文件
         JBotConfig config = JBotConfig.load().await();
         // 通过SPI加载适配器
-        ServiceLoader<Adapter> sl = SpiUtil.loadList(Adapter.class);
-        var adapter = Optional.ofNullable(sl.getService(config.getAdapter().getString("name"))).orElseThrow(() -> new RuntimeException("未找到适配器"));
+        var it = ServiceLoader.load(Adapter.class, new SpiClassLoader()).iterator();
+        if (!it.hasNext()) throw new AdapterException("未找到任何适配器，请检查adapter目录下是否存在适配器jar");
+        Adapter adapter = null;
+        while (it.hasNext() && adapter == null) {
+            Adapter next = it.next();
+            adapter = StrUtil.equals(next.name(), config.getAdapter().getString("name")) ? next : null;
+        }
+        if (adapter == null)
+            throw new AdapterException("未找到适配器：[" + config.getAdapter().getString("name") + "]，请检查配置中适配器名称或adapter目录中是否存在对应适配器");
+
         adapter.init(config.getAdapter());
         this.adapter = adapter;
         Context.get().setAdapter(adapter);

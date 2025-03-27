@@ -23,6 +23,13 @@ public final class Context {
     public static final Vertx vertx = Vertx.vertx();
     private static final Context INSTANCE = new Context();
 
+    static {
+        vertx.exceptionHandler(t -> {
+            t.printStackTrace();
+            System.exit(1);
+        });
+    }
+
     private Friend bot;
     private Friend owner;
     private JBotConfig config;

@@ -64,7 +64,8 @@ public class JBotConfig {
         log.debug("配置文件不存在，输出默认配置文件");
         var fs = Context.vertx.fileSystem();
         // 输出默认配置文件
-        return fs.readFile(JBotFiles.CONFIG_FILE.getName())
+        return fs.mkdirs(JBotFiles.CONFIG_DIR.getPath())
+                .compose(v -> fs.readFile(JBotFiles.CONFIG_FILE.getName()))
                 .compose(buffer -> fs.writeFile(JBotFiles.CONFIG_FILE.getPath(), buffer))
                 .onFailure(t -> log.warn("输出默认配置文件时出现异常：{}", t.getMessage()))
                 .onSuccess(v -> log.debug("输出默认配置文件成功"));

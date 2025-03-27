@@ -8,6 +8,7 @@ import x.ovo.jbot.adapter.apad.ApiUtil;
 import x.ovo.jbot.core.Context;
 import x.ovo.jbot.core.message.MessageFactory;
 
+import java.time.Instant;
 import java.util.Objects;
 
 @Slf4j
@@ -25,6 +26,7 @@ public class SyncService {
                     JsonArray msgs = data.getJsonArray("AddMsgs");
                     if (Objects.nonNull(msgs) && !msgs.isEmpty()) {
                         msgs.forEach(msg -> {
+                            if (Instant.now().toEpochMilli() / 1000 - ((JsonObject) msg).getLong("CreateTime") > 60) return;
                             log.debug("接收到新消息：{}", ((JsonObject) msg).encodePrettily());
                             ((JsonObject) msg).put("ToUserName", ((JsonObject) msg).getJsonObject("ToWxid"));
                             Context.get().getMessageManager().addReceive(MessageFactory.convert((JsonObject) msg));

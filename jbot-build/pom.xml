@@ -15,7 +15,6 @@
     <properties>
         <revision>0.0.1</revision>
         <java.version>21</java.version>
-        <build.platform>windows-x86_64</build.platform>
 
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -42,6 +41,69 @@
         <easyj-maven-plugin.version>1.1.5</easyj-maven-plugin.version>
     </properties>
 
+    <profiles>
+        <profile>
+            <id>windows-x86_64</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                    <arch>amd64</arch>
+                </os>
+            </activation>
+            <properties>
+                <build.platform>windows-x86_64</build.platform>
+            </properties>
+        </profile>
+        <profile>
+            <id>linux-x86_64</id>
+            <activation>
+                <os>
+                    <family>linux</family>
+                    <arch>amd64</arch>
+                </os>
+            </activation>
+            <properties>
+                <build.platform>linux-x86_64</build.platform>
+            </properties>
+        </profile>
+        <profile>
+            <id>linux-arm64</id>
+            <activation>
+                <os>
+                    <family>linux</family>
+                    <arch>aarch64</arch>
+                </os>
+            </activation>
+            <properties>
+                <build.platform>linux-arm64</build.platform>
+            </properties>
+        </profile>
+        <profile>
+            <id>mac-x86_64</id>
+            <activation>
+                <os>
+                    <family>mac os x</family>
+                    <arch>x86_64</arch>
+                </os>
+            </activation>
+            <properties>
+                <build.platform>macosx-x86_64</build.platform>
+            </properties>
+        </profile>
+        <profile>
+            <id>mac-arm64</id>
+            <activation>
+                <os>
+                    <family>mac os x</family>
+                    <arch>aarch64</arch>
+                </os>
+            </activation>
+            <properties>
+                <build.platform>macosx-arm64</build.platform>
+            </properties>
+        </profile>
+    </profiles>
+
 
     <build>
         <plugins>
@@ -55,7 +117,7 @@
                     <!-- 扁平化后的pom文件名（默认：.simplified-pom.xml） -->
                     <simplifiedPomFileName>.flattened-pom.xml</simplifiedPomFileName>
                     <!-- <name>内容模板，用于生成所有子模块的<name>，例：'${project.groupId}::${project.artifactId}' -->
-<!--                    <artifactNameTemplate></artifactNameTemplate>-->
+                    <!--                    <artifactNameTemplate></artifactNameTemplate>-->
                     <!-- 是否开源项目，开源项目下，部分信息标签必须（默认：true） -->
                     <isOpenSourceProject>false</isOpenSourceProject>
                     <!-- 是否使用制表符`\t`代替两个空格进行缩进（v1.0.1新特性）（默认：false） -->

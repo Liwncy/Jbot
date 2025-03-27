@@ -19,16 +19,8 @@ public class APadAdapter implements Adapter {
 
     private static @Getter JsonObject config;
     public static final String NAME = "apad-adapter";
+    private static final String CONFIG_PATH = new File(JBotFiles.ADAPTER_DIR, NAME + File.separator + "config.json").getPath();
 
-    public static Future<Void> saveConfig() {
-        String path = new File(JBotFiles.ADAPTER_DIR, NAME + File.separator + "config.json").getPath();
-        return Context.vertx.fileSystem()
-                .mkdirs(new File(JBotFiles.ADAPTER_DIR, NAME).getPath())
-                .onSuccess(i -> Context.vertx.fileSystem()
-                        .writeFile(path, Buffer.buffer(config.encodePrettily()))
-                        .onSuccess(v -> log.debug("配置文件保存成功"))
-                );
-    }
 
     @Override
     public String name() {
@@ -103,21 +95,27 @@ public class APadAdapter implements Adapter {
 
     @Override
     public Future<Void> onInit(JsonObject cfg) {
-        return Future.future(promise -> {
-            FileSystem fs = Context.vertx.fileSystem();
-            String path = new File(JBotFiles.ADAPTER_DIR, this.name() + File.separator + "config.json").getPath();
-            // 如果存在配置文件，则合并配置
-            if (fs.existsBlocking(path)) cfg.mergeIn(fs.readFileBlocking(path).toJsonObject());
-            log.debug("adapter config: {}", cfg.encodePrettily());
-            // api工具设置token与deviceId
-            APadAdapter.config = cfg;
-            log.info(NAME + " 初始化完成");
-            promise.complete();
-        });
+        FileSystem fs = Context.vertx.fileSystem();
+        return fs.mkdirs(new File(JBotFiles.ADAPTER_DIR, NAME).getPath())
+                .onSuccess(v -> {
+                    // 如果存在配置文件，则合并配置
+                    if (fs.existsBlocking(CONFIG_PATH)) cfg.mergeIn(fs.readFileBlocking(CONFIG_PATH).toJsonObject());
+                    log.debug("adapter config: {}", cfg.encodePrettily());
+                    // 启动协议服务
+                    Util.startServer(cfg);
+                    APadAdapter.config = cfg;
+                    log.info(NAME + " 初始化完成");
+                });
     }
 
     @Override
     public Future<Void> onDestroy() {
         return saveConfig();
+    }
+
+    public static Future<Void> saveConfig() {
+        return Context.vertx.fileSystem()
+                .writeFile(CONFIG_PATH, Buffer.buffer(config.encodePrettily()))
+                .onSuccess(v -> log.debug("配置文件保存成功"));
     }
 }

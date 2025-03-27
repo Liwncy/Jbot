@@ -5,7 +5,7 @@
     "debugConfig": {},                                  // 调试模式配置
     "saveMedia": false,                                 // 是否保存图片等媒体文件
     "owner": "",                                        // bot管理员
-    "redis": "redis://[:password@]host[:port][/db-number]"  // redis连接字符串
+    "redis": "redis://localhost:6380/0"  // redis连接字符串
   },
   // 登录相关配置
   "login": {
@@ -22,6 +22,16 @@
   },
   // 适配器相关配置
   "adapter": {
-    "name": "x.ovo.jbot.adapter.gewe.GeweAdapter"
+    "name": "gewe-adapter",
+    "host" : "119.177.60.74",
+    "port" : 8888,
+    "callback_ip" : "119.177.60.74",
+    "callback_port" : 7999,
+    "token" : "bde745ae6a44402791f1c2a852fcb674",
+    "device_id" : "wx_0O5xXRSdu4G3b33Z2DjjE",
+    "redis_host": "127.0.0.1",
+    "redis_port": 6380,
+    "redis_pwd": "",
+    "redis_db": 0
   }
 }

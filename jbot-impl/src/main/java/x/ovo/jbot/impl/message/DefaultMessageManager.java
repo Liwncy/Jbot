@@ -14,6 +14,7 @@ import x.ovo.jbot.core.message.entity.Message;
 import x.ovo.jbot.core.message.entity.SentMessage;
 import x.ovo.jbot.core.message.entity.TextMessage;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -129,6 +130,7 @@ public class DefaultMessageManager implements MessageManager {
         }
         var message = RECEIVE_QUEUE.poll();
         if (Objects.isNull(message)) return;
+        if (Instant.now().toEpochMilli() / 1000 - message.getCreateTime() > 60) return;
         log.info(message.formatString());
         this.executor.execute(() -> {
             // 如果是指令，则执行指令

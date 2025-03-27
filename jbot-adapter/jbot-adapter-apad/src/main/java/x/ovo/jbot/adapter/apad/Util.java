@@ -1,16 +1,26 @@
 package x.ovo.jbot.adapter.apad;
 
+import io.vertx.core.json.JsonObject;
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import org.dromara.hutool.core.codec.binary.HexUtil;
 import org.dromara.hutool.core.data.id.IdUtil;
+import org.dromara.hutool.core.io.IoUtil;
+import org.dromara.hutool.core.io.file.FileUtil;
+import org.dromara.hutool.core.text.StrUtil;
 import org.dromara.hutool.core.util.RandomUtil;
+import org.dromara.hutool.core.util.RuntimeUtil;
+import x.ovo.jbot.core.common.constant.JBotFiles;
 import x.ovo.jbot.core.common.exception.AdapterException;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @UtilityClass
 public class Util {
 
@@ -33,6 +43,7 @@ public class Util {
             "Flores", "Green", "Adams", "Nelson", "Baker", "Hall", "Rivera", "Campbell",
             "Mitchell", "Carter", "Roberts", "Gomez", "Phillips", "Evans"
     );
+
     public static String generateDeviceName() {
         var index = RandomUtil.randomInt(firstNames.size());
         return firstNames.get(index) + " " + lastNames.get(index) + "'s Pad";
@@ -49,6 +60,32 @@ public class Util {
         }
     }
 
-
+    public static void startServer(JsonObject config) {
+        var os = System.getProperty("os.name").toLowerCase();
+        var fileName = StrUtil.format("XYWechatPad{}", os.startsWith("win") ? ".exe" : "");
+        // 输出文件
+        File file = FileUtil.file(JBotFiles.ADAPTER_DIR, APadAdapter.NAME, fileName);
+        if (!file.exists()) {
+            BufferedOutputStream stream = FileUtil.getOutputStream(file);
+            IoUtil.copy(Util.class.getClassLoader().getResourceAsStream(fileName), stream);
+            try {
+                stream.flush();
+                stream.close();
+            } catch (Exception ignore) {}
+        }
+        log.debug("协议服务文件路径：{}", file.getPath());
+        var cmd = StrUtil.format("{} -p {} -m {} -rh {} -rp {} -rpwd {} -rdb {}",
+                file.getPath(),
+                config.getInteger("port", 9000),
+                config.getString("mode", "release"),
+                config.getString("redis_host", "127.0.0.1"),
+                config.getInteger("redis_port", 6379),
+                config.getString("redis_pwd", ""),
+                config.getInteger("redis_db", 0)
+        );
+        log.debug("协议服务启动命令：{}", cmd);
+        var res = RuntimeUtil.execForStr(cmd);
+        log.debug("协议服务启动结果：{}", res);
+    }
 
 }

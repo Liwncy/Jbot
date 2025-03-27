@@ -77,6 +77,69 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.5.3</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <finalName>${project.artifactId}</finalName>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                    <transformers>
+                        <transformer
+                                implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                            <mainClass>x.ovo.jbot.impl.Main</mainClass>
+                        </transformer>
+                    </transformers>
+                </configuration>
+            </plugin>
+        </plugins>
+
+        <!--        <plugins>-->
+        <!--            <plugin>-->
+        <!--                <groupId>org.apache.maven.plugins</groupId>-->
+        <!--                <artifactId>maven-jar-plugin</artifactId>-->
+        <!--                <version>3.3.0</version>-->
+        <!--                <configuration>-->
+        <!--                    &lt;!&ndash; 可选：指定主类 &ndash;&gt;-->
+        <!--                    <archive>-->
+        <!--                        <manifest>-->
+        <!--                            <addClasspath>true</addClasspath>-->
+        <!--                            <classpathPrefix>lib/</classpathPrefix>-->
+        <!--                            <mainClass>x.ovo.jbot.impl.Main</mainClass>-->
+        <!--                        </manifest>-->
+        <!--                    </archive>-->
+        <!--                </configuration>-->
+        <!--            </plugin>-->
+        <!--            <plugin>-->
+        <!--                <groupId>org.apache.maven.plugins</groupId>-->
+        <!--                <artifactId>maven-dependency-plugin</artifactId>-->
+        <!--                <version>3.6.0</version>-->
+        <!--                <executions>-->
+        <!--                    <execution>-->
+        <!--                        <id>copy-dependencies</id>-->
+        <!--                        <phase>package</phase>-->
+        <!--                        <goals>-->
+        <!--                            <goal>copy-dependencies</goal>-->
+        <!--                        </goals>-->
+        <!--                        <configuration>-->
+        <!--                            <outputDirectory>${project.build.directory}/lib</outputDirectory>-->
+        <!--                            <overWriteReleases>false</overWriteReleases>-->
+        <!--                            <overWriteSnapshots>false</overWriteSnapshots>-->
+        <!--                        </configuration>-->
+        <!--                    </execution>-->
+        <!--                </executions>-->
+        <!--            </plugin>-->
+        <!--        </plugins>-->
     </build>
 
 

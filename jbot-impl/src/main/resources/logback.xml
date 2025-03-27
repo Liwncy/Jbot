@@ -7,7 +7,7 @@
     <!-- 日志输出目录 -->
     <property name="LOG_HOME" value="log"/>
     <!-- 控制台输出级别下限 -->
-    <property name="CONSOLE_LEVEL" value="TRACE"/>
+    <property name="CONSOLE_LEVEL" value="DEBUG"/>
     <!-- 时间格式 -->
     <property name="DATE_PATTERN" value="%d{yyyy-MM-dd}.%i.log"/>
     <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
@@ -111,7 +111,7 @@
     <root>
         <level value="DEBUG"/>
         <appender-ref ref="STDOUT"/>
-<!--        <appender-ref ref="FILE"/>-->
+        <appender-ref ref="FILE"/>
 <!--        <appender-ref ref="FILE_DEBUG"/>-->
         <!--<appender-ref ref="FILE_INFO"/>-->
         <!--<appender-ref ref="FILE_ERROR"/>-->
