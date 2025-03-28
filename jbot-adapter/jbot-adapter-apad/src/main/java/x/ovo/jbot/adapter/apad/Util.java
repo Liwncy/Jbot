@@ -1,6 +1,7 @@
 package x.ovo.jbot.adapter.apad;
 
 import io.vertx.core.json.JsonObject;
+import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.hutool.core.codec.binary.HexUtil;
@@ -8,6 +9,7 @@ import org.dromara.hutool.core.data.id.IdUtil;
 import org.dromara.hutool.core.io.IoUtil;
 import org.dromara.hutool.core.io.file.FileUtil;
 import org.dromara.hutool.core.text.StrUtil;
+import org.dromara.hutool.core.thread.ThreadUtil;
 import org.dromara.hutool.core.util.RandomUtil;
 import org.dromara.hutool.core.util.RuntimeUtil;
 import x.ovo.jbot.core.common.constant.JBotFiles;
@@ -61,11 +63,34 @@ public class Util {
     }
 
     public static void startServer(JsonObject config) {
+        var path = creatEnv();
+        var cmd = StrUtil.format("{} -p {} -m {} -rh {} -rp {} {} -rdb {}",
+                path,
+                config.getInteger("port", 9000),
+                config.getString("mode", "release"),
+                config.getString("redis_host", "127.0.0.1"),
+                config.getInteger("redis_port", 6379),
+                Optional.ofNullable(config.getString("redis_pwd")).map(s -> "-rpwd " + s).orElse(""),
+                config.getInteger("redis_db", 0)
+        );
+        log.debug("协议服务启动命令：{}", cmd);
+        ThreadUtil.newThread(() -> RuntimeUtil.execForStr(cmd), "protocol-server").start();
+        ApiUtil.getString("/IsRunning").onSuccess(v -> log.info("协议服务启动成功"));
+    }
+
+    @SneakyThrows
+    private String creatEnv() {
+        var parent = FileUtil.file(JBotFiles.ADAPTER_DIR, "runtime", APadAdapter.NAME, "WechatAPI", "core");
         var os = System.getProperty("os.name").toLowerCase();
         var fileName = StrUtil.format("XYWechatPad{}", os.startsWith("win") ? ".exe" : "");
-        // 输出文件
-        File file = FileUtil.file(JBotFiles.ADAPTER_DIR, APadAdapter.NAME, fileName);
+        File file = FileUtil.file(parent, fileName);
         if (!file.exists()) {
+            parent.mkdirs();
+            FileUtil.file(JBotFiles.ADAPTER_DIR, "runtime", APadAdapter.NAME, "database").mkdirs();
+            FileUtil.file(JBotFiles.ADAPTER_DIR, "runtime", APadAdapter.NAME, "plugins").mkdirs();
+            FileUtil.file(JBotFiles.ADAPTER_DIR, "runtime", APadAdapter.NAME, "utils").mkdirs();
+            FileUtil.file(JBotFiles.ADAPTER_DIR, "runtime", APadAdapter.NAME, "utils", "xybot.py").createNewFile();
+            FileUtil.file(JBotFiles.ADAPTER_DIR, "runtime", APadAdapter.NAME, "main_config.toml").createNewFile();
             BufferedOutputStream stream = FileUtil.getOutputStream(file);
             IoUtil.copy(Util.class.getClassLoader().getResourceAsStream(fileName), stream);
             try {
@@ -73,19 +98,9 @@ public class Util {
                 stream.close();
             } catch (Exception ignore) {}
         }
+        file.setExecutable(true);
         log.debug("协议服务文件路径：{}", file.getPath());
-        var cmd = StrUtil.format("{} -p {} -m {} -rh {} -rp {} -rpwd {} -rdb {}",
-                file.getPath(),
-                config.getInteger("port", 9000),
-                config.getString("mode", "release"),
-                config.getString("redis_host", "127.0.0.1"),
-                config.getInteger("redis_port", 6379),
-                config.getString("redis_pwd", ""),
-                config.getInteger("redis_db", 0)
-        );
-        log.debug("协议服务启动命令：{}", cmd);
-        var res = RuntimeUtil.execForStr(cmd);
-        log.debug("协议服务启动结果：{}", res);
+        return file.getPath();
     }
 
 }

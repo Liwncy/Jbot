@@ -64,9 +64,11 @@ public class DebugPluginManager extends DefaultPluginManager {
         return () -> {
             log.info("插件调试模式开启，开始监听控制台输入");
             var msg = new TextMessage();
-            if (Objects.isNull(Context.get().getOwner())) Context.get().setOwner(Friend.builder().id("test_sender").nickname("test sender").build());
+            if (Objects.isNull(Context.get().getOwner()))
+                Context.get().setOwner(Friend.builder().id("test_sender").nickname("test sender").build());
             // 如果bot信息为空
-            if (Objects.isNull(Context.get().getBot())) Context.get().setBot(Friend.builder().id("test_receiver").nickname("test receiver").build());
+            if (Objects.isNull(Context.get().getBot()))
+                Context.get().setBot(Friend.builder().id("test_receiver").nickname("test receiver").build());
 
             msg.setSender(Context.get().getOwner());
             msg.setReceiver(Context.get().getBot());
@@ -78,7 +80,7 @@ public class DebugPluginManager extends DefaultPluginManager {
                 var text = scanner.nextLine();
                 if (StrUtil.isBlank(text)) {continue;}
                 msg.setContent(text);
-                msg.setRaw(Buffer.buffer(raw).toJsonObject());
+                msg.setRaw(Buffer.buffer(raw).toJsonObject().put("CreateTime", System.currentTimeMillis() / 1000));
                 Context.get().getMessageManager().addReceive(msg);
             }
         };

@@ -1,7 +1,9 @@
 package x.ovo.jbot.core.contact;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import x.ovo.jbot.core.common.enums.ContactType;
 
@@ -13,6 +15,8 @@ import x.ovo.jbot.core.common.enums.ContactType;
  */
 @Data
 @SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Group extends Contact {
 

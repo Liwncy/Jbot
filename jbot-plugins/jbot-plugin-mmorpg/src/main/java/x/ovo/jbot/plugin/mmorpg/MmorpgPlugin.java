@@ -17,7 +17,13 @@ public class MmorpgPlugin extends Plugin {
 
     @Override
     public void onLoad() {
+        MySQLClient.init(this.vertx, this.getConfig().getJsonObject("mysql_config"));
         this.saveDefaultConfig();
+    }
+
+    @Override
+    public void onUnload() {
+        MySQLClient.getInstance().close();
     }
 
     @Override

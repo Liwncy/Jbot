@@ -30,7 +30,7 @@
         <ver.slf4j>2.0.16</ver.slf4j>
         <ver.picocli>4.7.6</ver.picocli>
         <ver.logback>1.5.12</ver.logback>
-        <ver.hutool>6.0.0-M19</ver.hutool>
+        <ver.hutool>6.0.0-M20</ver.hutool>
         <ver.jackson>2.15.4</ver.jackson>
         <ver.junit>5.10.3</ver.junit>
         <ver.javacv>1.5.11</ver.javacv>

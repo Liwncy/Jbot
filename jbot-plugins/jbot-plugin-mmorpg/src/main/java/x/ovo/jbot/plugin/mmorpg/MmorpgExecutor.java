@@ -49,7 +49,7 @@ public class MmorpgExecutor extends CommandExecutor {
             }
 
             // Now close the pool
-            client.close();
+            // client.close();
         });
         return MapUtil.getStr(this.plugin.getConfig().getMap(), "help");
     }

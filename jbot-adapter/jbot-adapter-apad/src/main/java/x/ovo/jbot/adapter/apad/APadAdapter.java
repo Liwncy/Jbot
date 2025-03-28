@@ -13,6 +13,7 @@ import x.ovo.jbot.core.common.constant.JBotFiles;
 import x.ovo.jbot.core.service.*;
 
 import java.io.File;
+import java.util.Objects;
 
 @Slf4j
 public class APadAdapter implements Adapter {
@@ -37,7 +38,13 @@ public class APadAdapter implements Adapter {
                     Context.get().setBot(me);
                 }))
                 //  2、获取联系人信息存入联系人管理器中
-                .compose(v -> this.getContactService().list())
+                .compose(v -> {
+                    if (Objects.isNull(Context.get().getOwner())) {
+                        return this.getContactService().list();
+                    } else {
+                        return Future.succeededFuture();
+                    }
+                })
                 //  3、开启消息同步
                 .onSuccess(v -> SyncService.start())
                 .mapEmpty();
@@ -101,9 +108,11 @@ public class APadAdapter implements Adapter {
                     // 如果存在配置文件，则合并配置
                     if (fs.existsBlocking(CONFIG_PATH)) cfg.mergeIn(fs.readFileBlocking(CONFIG_PATH).toJsonObject());
                     log.debug("adapter config: {}", cfg.encodePrettily());
-                    // 启动协议服务
-                    Util.startServer(cfg);
+                    // 启动协议服务还是使用现有服务？
                     APadAdapter.config = cfg;
+                    if (cfg.getBoolean("start_server", true)) {
+                        Util.startServer(cfg);
+                    }
                     log.info(NAME + " 初始化完成");
                 });
     }

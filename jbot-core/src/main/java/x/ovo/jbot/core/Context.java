@@ -24,10 +24,7 @@ public final class Context {
     private static final Context INSTANCE = new Context();
 
     static {
-        vertx.exceptionHandler(t -> {
-            t.printStackTrace();
-            System.exit(1);
-        });
+        vertx.exceptionHandler(Throwable::printStackTrace);
     }
 
     private Friend bot;

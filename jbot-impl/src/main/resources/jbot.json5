@@ -4,7 +4,7 @@
     "debug": false,                                     // 是否启用调试模式
     "debugConfig": {},                                  // 调试模式配置
     "saveMedia": false,                                 // 是否保存图片等媒体文件
-    "owner": "",                                        // bot管理员
+    "owner": "nickname:@:Liwncy",                                        // bot管理员
     "redis": "redis://localhost:6380/0"  // redis连接字符串
   },
   // 登录相关配置
@@ -18,7 +18,7 @@
   // 命令相关配置
   "command": {
     "showTip": true,                                    // 是否显示命令提示
-    "noPermissionTip": "你配执行这个命令吗？"               // 无权限提示
+    "noPermissionTip": "您配执行这个命令吗？"               // 无权限提示
   },
   // 适配器相关配置
   "adapter": {

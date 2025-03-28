@@ -10,6 +10,8 @@ import x.ovo.jbot.core.common.enums.ContactType;
  * @author ovo created on 2025/02/17.
  */
 @Data
+//@NoArgsConstructor
+//@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class SpecialAccount extends Contact {
 

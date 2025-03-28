@@ -7,13 +7,11 @@ import x.ovo.jbot.core.common.enums.ContactType;
 import x.ovo.jbot.core.common.enums.Gender;
 import x.ovo.jbot.core.contact.*;
 
-import java.util.List;
 import java.util.Optional;
 
 public class ContactFactory {
 
 
-    private static final String[] SPECIAL_ACCOUNT = {"weixin", "filebox", "tmessage", "qmessage", "fmessage", "qqmail", "qqsafe", "medianote"};
     private static ContactManager cm;
 
     private static ContactManager getManager() {
@@ -106,7 +104,7 @@ public class ContactFactory {
     ///         "ExtFlag": 0
     ///       },
     public static Future<? extends Contactable> of(JsonObject data) {
-        var type = getType(data.getJsonObject("UserName").getString("string"));
+        var type = ContactType.of(data.getJsonObject("UserName").getString("string"));
         return switch (type) {
             case FRIEND -> buildFriend(data);
             case GROUP -> buildGroup(data);
@@ -114,14 +112,6 @@ public class ContactFactory {
             case SPECIAL -> buildSpecialAccount(data);
             default -> null;
         };
-    }
-
-
-    public static ContactType getType(String id) {
-        if (id.endsWith("@chatroom")) return ContactType.GROUP;
-        if (id.startsWith("gh_")) return ContactType.OFFICIAL_ACCOUNT;
-        if (List.of(SPECIAL_ACCOUNT).contains(id)) return ContactType.SPECIAL;
-        return ContactType.FRIEND;
     }
 
     private static Future<Friend> buildFriend(JsonObject data) {
