@@ -1,6 +1,7 @@
 package x.ovo.jbot.impl.plugin;
 
 import io.vertx.core.Future;
+import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.JsonObject;
@@ -140,6 +141,13 @@ public class DefaultPluginManager implements PluginManager {
         return PluginLoader.getPluginDescription(file)
                 .compose(desc -> PluginLoader.load(file, desc))
                 .compose(plugin -> Future.future(promise -> {
+                    try {
+                        var p = Promise.<Void>promise();
+                        plugin.onLoad(p);
+                        p.future().onFailure(t -> promise.fail(StrUtil.format("加载插件 [{}] 时出现异常：{}", plugin.getDescription().getName(), t.getMessage())));
+                    } catch (Exception e) {
+                        promise.fail(StrUtil.format("加载插件 [{}] 时出现异常：{}", plugin.getDescription().getName(), e.getMessage()));
+                    }
                     plugin.setEnabled(Optional.ofNullable(this.config.get(plugin.getDescription().getName())).map(PluginConfig::getEnabled).orElse(true));
                     Context.get().getEventManager().register(plugin).onFailure(promise::fail);
                     Context.get().getCommandManager().register(plugin).onFailure(promise::fail);
@@ -163,6 +171,15 @@ public class DefaultPluginManager implements PluginManager {
             // 从容器中移除插件
             this.container.remove(name);
             this.list.remove(plugin);
+
+            try {
+                var p = Promise.<Void>promise();
+                plugin.onUnload(p);
+                p.future().onFailure(e -> log.warn(StrUtil.format("卸载插件 [{}] 时出现异常：{}", name, e.getMessage())));
+            } catch (Exception e) {
+                log.warn(StrUtil.format("卸载插件 [{}] 时出现异常：{}", name, e.getMessage()));
+            }
+
             // 注销插件事件监听器和命令执行器
             Context.get().getEventManager().unregister(plugin).onFailure(e -> log.warn(StrUtil.format("卸载插件 [{}] 事件监听器时出现异常：{}", name, e.getMessage())));
             Context.get().getCommandManager().unregister(plugin).onFailure(e -> log.warn(StrUtil.format("卸载插件 [{}] 命令执行器时出现异常：{}", name, e.getMessage())));

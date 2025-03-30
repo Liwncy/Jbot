@@ -1,0 +1,7 @@
+{
+  "name": "tips",
+  "main": "x.ovo.jbot.plugin.TipsPlugin",
+  "version": "1.0.0",
+  "description": "群成员进群提示",
+  "authors": ["ovo"]
+}

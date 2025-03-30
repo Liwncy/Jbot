@@ -1,0 +1,7 @@
+{
+  "name": "reread",
+  "main": "reread.js",
+  "version": "1.0.0",
+  "description": "js实现的复读机插件",
+  "authors": ["ovo"]
+}

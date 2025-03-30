@@ -6,10 +6,11 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.hutool.http.HttpUtil;
 import x.ovo.jbot.core.command.CommandExecutor;
+import x.ovo.jbot.core.event.CallListener;
 import x.ovo.jbot.core.event.EventListener;
 import x.ovo.jbot.core.event.MessageEvent;
+import x.ovo.jbot.core.message.entity.ImageMessage;
 import x.ovo.jbot.core.message.entity.TextMessage;
-import x.ovo.jbot.core.message.entity.appmsg.LinkMessage;
 import x.ovo.jbot.core.plugin.Plugin;
 
 @Slf4j
@@ -38,19 +39,41 @@ public class EpicPlugin extends Plugin {
                     source.getSender().send("获取失败：" + json.getString("message"));
                     return false;
                 } else {
-                    json.getJsonArray("data").stream()
+//                    json.getJsonArray("data").stream()
+//                            .map(JsonObject::mapFrom)
+//                            .filter(data -> data.getBoolean("is_free_now"))
+//                            .forEach(data -> {
+//                                var msg = new LinkMessage();
+//                                msg.setTitle(data.getString("title"));
+//                                msg.setThumbUrl(data.getString("cover"));
+//                                msg.setDesc(data.getString("description"));
+//                                msg.setUrl(data.getString("link"));
+//                                source.getSender().send(msg);
+//                            });
+
+                    var list = json.getJsonArray("data").stream()
                             .map(JsonObject::mapFrom)
                             .filter(data -> data.getBoolean("is_free_now"))
-                            .forEach(data -> {
-                                var msg = new LinkMessage();
-                                msg.setTitle(data.getString("title"));
-                                // 图片大小超出：51200byte
-                                // msg.setThumbUrl(data.getString("cover"));
-                                msg.setThumbUrl("https://bkimg.cdn.bcebos.com/pic/0dd7912397dda14478a7d273beb7d0a20df48641");
-                                msg.setDesc(data.getString("description"));
-                                msg.setUrl(data.getString("link"));
-                                source.getSender().send(msg);
-                            });
+                            .map(data -> JsonObject.of(
+                                        "date", data.getString("free_start") + " - " + data.getString("free_end"),
+                                        "title", "🎮 EPIC 本周免费游戏",
+                                        "content", data.getString("description"),
+                                        "author", "epic助手 - ovo",
+                                        "textCount", "价格",
+                                        "qrCodeTitle", data.getString("title"),
+                                        "qrCodeText", "扫描二维码获取游戏",
+                                        "qrCode", data.getString("link"),
+                                        "textCountNum", data.getString("price")
+                                )
+                            ).toList();
+
+                    list.forEach(e -> {
+                        var res = CallListener.call("card", JsonObject.of("form", e));
+                        ImageMessage message = new ImageMessage();
+                        message.setHashBase64(res.getString("data"));
+                        source.getSender().send(message);
+
+                    });
                 }
                 return true;
             }

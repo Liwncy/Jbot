@@ -32,9 +32,11 @@ public enum MessageServiceImpl implements MessageService {
                 "Wxid", APadAdapter.getConfig().getString("wxid")
         );
         return ApiUtil.post("/SendTextMsg", body)
-                .map(res -> res.getJsonObject("Data"))
-                .map(data -> data.getJsonArray("List").getList().getFirst())
-                .map(JsonObject::mapFrom)
+                .map(res -> {
+                    var data = res.getJsonObject("Data").getJsonArray("List").getJsonObject(0);
+                    data.put("BaseResponse", res.getJsonObject("Data").getJsonObject("BaseResponse"));
+                    return data;
+                })
                 .compose(data -> buildSentMessage(data, message));
     }
 
@@ -192,6 +194,7 @@ public enum MessageServiceImpl implements MessageService {
     }
 
     private Future<SentMessage> buildSentMessage(JsonObject json, Message message) {
+        if (json.getJsonObject("BaseResponse").getInteger("ret") != 0) return Future.failedFuture(json.getJsonObject("BaseResponse").getString("errMsg", "发送失败"));
         var msg = new SentMessage();
         msg.setMsgId(json.getInteger("MsgId", json.getInteger("msgId", json.getInteger("Msgid"))));
         msg.setNewMsgId(json.getLong("NewMsgId", json.getLong("newMsgId", json.getLong("Newmsgid"))));

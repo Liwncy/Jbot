@@ -79,12 +79,12 @@ public abstract class Plugin implements PluginLifeCycle, Comparable<Plugin> {
     /**
      * 刷新配置，重新从配置文件中读取
      */
-    protected final void flushConfig() {
-        var configFile = new File(this.getDataDir(), JBotConstant.CONFIG_JSON5);
-        if (configFile.exists()) {
-            this.vertx.fileSystem().readFile(configFile.getPath())
-                    .onSuccess(buffer -> this.config = buffer.toJsonObject())
-                    .onFailure(throwable -> log.error("读取配置文件失败", throwable));
+    public final void flushConfig() {
+        var files = this.getDataDir().listFiles((dir, name) -> name.startsWith(JBotConstant.CONFIG_JSON));
+        // 如果插件目录下存在插件配置文件，则读取配置文件
+        if (Objects.nonNull(files) && files.length > 0) {
+            var config = Context.vertx.fileSystem().readFileBlocking(files[0].getPath()).toJsonObject();
+            this.setConfig(config);
         }
     }
 
@@ -94,7 +94,7 @@ public abstract class Plugin implements PluginLifeCycle, Comparable<Plugin> {
      *
      * @apiNote 如说明所述，当插件数据目录已经存在配置文件时调用此方法，在持久化内存中配置时，会覆盖原配置文件，配置文件中的注释将消失
      */
-    protected final void saveConfig() throws IOException {
+    public final void saveConfig() throws IOException {
         var files = this.getDataDir().listFiles((dir, name) -> name.startsWith(JBotConstant.CONFIG_JSON));
         if (Objects.nonNull(files) && files.length > 0) {
             // 如果插件数据目录下已经存在配置文件，将会覆盖原配置文件

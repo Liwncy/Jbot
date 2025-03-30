@@ -20,7 +20,7 @@ public class SyncService {
                 "Synckey", "",
                 "Wxid", APadAdapter.getConfig().getString("wxid")
         );
-        Context.vertx.setPeriodic(500, id -> ApiUtil.post("/Sync", body)
+        Context.vertx.setPeriodic(1000, id -> ApiUtil.post("/Sync", body)
                 .map(res -> res.getJsonObject("Data"))
                 .onSuccess(data -> {
                     JsonArray msgs = data.getJsonArray("AddMsgs");

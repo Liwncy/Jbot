@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.zip.ZipFile;
 
@@ -76,21 +75,12 @@ public class PluginLoader {
                 plugin.setVertx(Context.vertx);
                 plugin.setDescription(description);
                 plugin.saveDefaultConfig();
-                setConfig(plugin);
+                plugin.flushConfig();
                 promise.complete(plugin);
             } catch (Exception e) {
                 promise.fail(e);
             }
         });
-    }
-
-    private static void setConfig(Plugin plugin) {
-        var files = plugin.getDataDir().listFiles((dir, name) -> name.startsWith(JBotConstant.CONFIG_JSON));
-        // 如果插件目录下存在插件配置文件，则读取配置文件
-        if (Objects.nonNull(files) && files.length > 0) {
-            var config = Context.vertx.fileSystem().readFileBlocking(files[0].getPath()).toJsonObject();
-            plugin.setConfig(config);
-        }
     }
 
 }

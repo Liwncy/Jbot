@@ -1,0 +1,48 @@
+{
+  "form": {
+    "date": "{date}",
+    "title": "{title}",
+    "content": "{content}",
+    "author": "{author}",
+    "textCount": "{textCount}",
+    "qrCodeTitle": "{qrCodeTitle}",
+    "qrCodeText": "{qrCodeText}",
+    "qrCode": "{qrCode}",
+    "textCountNum": "{textCountNum}"
+  },
+  "style": {
+    "align": "left",
+    "backgroundName": "across-blue-color-24",
+    "backShadow": "",
+    "font": "Alibaba-PuHuiTi-Regular",
+    "width": 440,
+    "ratio": "",
+    "height": 0,
+    "fontScale": 1,
+    "padding": "0px",
+    "borderRadius": "0px",
+    "color": "#ffffff",
+    "opacity": 1,
+    "blur": 0,
+    "backgroundAngle": "100deg",
+    "lineHeights": {
+      "content": ""
+    },
+    "letterSpacings": {
+      "content": ""
+    }
+  },
+  "switchConfig": {
+    "showIcon": false,
+    "showDate": true,
+    "showTitle": true,
+    "showContent": true,
+    "showAuthor": true,
+    "showTextCount": true,
+    "showQRCode": true,
+    "showPageNum": false,
+    "showWatermark": false
+  },
+  "temp": "tempC",
+  "language": "en"
+}

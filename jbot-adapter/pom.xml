@@ -16,6 +16,7 @@
 
     <modules>
         <module>jbot-adapter-gewe</module>
+        <module>jbot-adapter-native</module>
         <module>jbot-adapter-apad</module>
     </modules>
 
@@ -37,7 +38,6 @@
         <dependency>
             <groupId>org.dromara.hutool</groupId>
             <artifactId>hutool-extra</artifactId>
-            <version>6.0.0-M19</version>
         </dependency>
     </dependencies>
 
@@ -58,7 +58,7 @@
             </resource>
             <resource>
                 <directory>src/main/resources/${build.platform}</directory>
-                <!--                <targetPath>${project.build.outputDirectory}</targetPath>-->
+<!--                <targetPath>${project.build.outputDirectory}</targetPath>-->
             </resource>
         </resources>
         <plugins>

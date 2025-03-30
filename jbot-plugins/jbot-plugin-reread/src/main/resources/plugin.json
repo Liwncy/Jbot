@@ -1,7 +1,7 @@
 {
   "name": "reread",
-  "main": "reread.js",
+  "main": "x.ovo.jbot.plugin.RereadPlugin",
   "version": "1.0.0",
-  "description": "js实现的复读机插件",
+  "description": "复读机插件",
   "authors": ["ovo"]
 }

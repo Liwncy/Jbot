@@ -16,7 +16,7 @@
     <modules>
         <module>jbot-plugin-pm</module>
         <module>jbot-plugin-kfc</module>
-        <module>jbot-plugin-reread</module>
+        <module>jbot-plugin-js_example</module>
         <module>jbot-plugin-memory</module>
         <module>jbot-plugin-news</module>
         <module>jbot-plugin-onset</module>
@@ -27,6 +27,9 @@
         <module>jbot-plugin-setu</module>
         <module>jbot-plugin-xuanxue</module>
         <module>jbot-plugin-mmorpg</module>
+        <module>jbot-plugin-reread</module>
+        <module>jbot-plugin-tips</module>
+        <module>jbot-plugin-card</module>
     </modules>
 
     <dependencies>

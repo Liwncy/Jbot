@@ -1,0 +1,7 @@
+{
+  "name": "card",
+  "main": "x.ovo.jbot.plugin.CardPlugin",
+  "version": "1.0.0",
+  "description": "卡片生成服务插件",
+  "authors": ["ovo"]
+}

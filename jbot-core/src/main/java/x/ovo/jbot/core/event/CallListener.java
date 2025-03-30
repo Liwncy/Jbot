@@ -13,18 +13,19 @@ import x.ovo.jbot.core.plugin.Plugin;
 @RequiredArgsConstructor
 public abstract class CallListener {
 
-    private final Plugin plugin;
+    protected final Plugin plugin;
 
     public abstract JsonObject onCall(JsonObject data);
 
     public void register() {
-        Context.vertx.eventBus().<JsonObject>consumer(this.plugin.getDescription().getName(), msg -> {
+        Context.vertx.eventBus().<JsonObject>consumer(this.plugin.getDescription().getName(), msg -> this.plugin.getVertx().executeBlocking(() -> {
             var data = msg.body();
             var res = this.onCall(data);
             if (res != null) {
                 msg.reply(res);
             }
-        });
+            return null;
+        }));
     }
 
     public static JsonObject call(String name, JsonObject data) {

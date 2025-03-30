@@ -80,17 +80,17 @@ public class Util {
 
     @SneakyThrows
     private String creatEnv() {
-        var parent = FileUtil.file(JBotFiles.ADAPTER_DIR, "runtime", APadAdapter.NAME, "WechatAPI", "core");
+        var parent = FileUtil.file(JBotFiles.ADAPTER_DIR, APadAdapter.NAME, "runtime", "WechatAPI", "core");
         var os = System.getProperty("os.name").toLowerCase();
         var fileName = StrUtil.format("XYWechatPad{}", os.startsWith("win") ? ".exe" : "");
         File file = FileUtil.file(parent, fileName);
         if (!file.exists()) {
             parent.mkdirs();
-            FileUtil.file(JBotFiles.ADAPTER_DIR, "runtime", APadAdapter.NAME, "database").mkdirs();
-            FileUtil.file(JBotFiles.ADAPTER_DIR, "runtime", APadAdapter.NAME, "plugins").mkdirs();
-            FileUtil.file(JBotFiles.ADAPTER_DIR, "runtime", APadAdapter.NAME, "utils").mkdirs();
-            FileUtil.file(JBotFiles.ADAPTER_DIR, "runtime", APadAdapter.NAME, "utils", "xybot.py").createNewFile();
-            FileUtil.file(JBotFiles.ADAPTER_DIR, "runtime", APadAdapter.NAME, "main_config.toml").createNewFile();
+            FileUtil.file(JBotFiles.ADAPTER_DIR, APadAdapter.NAME, "runtime", "database").mkdirs();
+            FileUtil.file(JBotFiles.ADAPTER_DIR, APadAdapter.NAME, "runtime", "plugins").mkdirs();
+            FileUtil.file(JBotFiles.ADAPTER_DIR, APadAdapter.NAME, "runtime", "utils").mkdirs();
+            FileUtil.file(JBotFiles.ADAPTER_DIR, APadAdapter.NAME, "runtime", "utils", "xybot.py").createNewFile();
+            FileUtil.file(JBotFiles.ADAPTER_DIR, APadAdapter.NAME, "runtime", "main_config.toml").createNewFile();
             BufferedOutputStream stream = FileUtil.getOutputStream(file);
             IoUtil.copy(Util.class.getClassLoader().getResourceAsStream(fileName), stream);
             try {

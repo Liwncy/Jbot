@@ -18,7 +18,7 @@ public class MusicListener extends EventListener<MessageEvent<TextMessage>, Text
 
     public static final String URL = "https://www.hhlqilongzhu.cn/api/dg_wyymusic.php?gm={}&n=1&br=2&type=json";
 
-    public static final String XML = "<appmsg appid=\"wx79f2c4418704b4f8\" sdkver=\"0\"><title>{title}</title><des>{singer}</des><action>view</action><type>76</type><showtype>0</showtype><content/><url>{url}</url><dataurl>{music_url}</dataurl><lowurl>{url}</lowurl><lowdataurl>{music_url}</lowdataurl><recorditem/><thumburl>{cover_url}</thumburl><messageaction/><laninfo/><extinfo/><sourceusername/><sourcedisplayname/><songlyric>{lyric}</songlyric><commenturl/><appattach><totallen>0</totallen><attachid/><emoticonmd5/><fileext/><aeskey/></appattach><webviewshared><publisherId/><publisherReqId>0</publisherReqId></webviewshared><weappinfo><pagepath/><username/><appid/><appservicetype>0</appservicetype></weappinfo><websearch/><songalbumurl>{cover_url}</songalbumurl></appmsg><fromusername>{wxid}</fromusername><scene>0</scene><appinfo><version>49</version><appname>中国建设银行</appname></appinfo><commenturl/>";
+    public static final String XML = "<appmsg appid=\"{provider}\" sdkver=\"0\"><title>{title}</title><des>{singer}</des><action>view</action><type>76</type><showtype>0</showtype><content/><url>{url}</url><dataurl>{music_url}</dataurl><lowurl>{url}</lowurl><lowdataurl>{music_url}</lowdataurl><recorditem/><thumburl>{cover_url}</thumburl><messageaction/><laninfo/><extinfo/><sourceusername/><sourcedisplayname/><songlyric>{lyric}</songlyric><commenturl/><appattach><totallen>0</totallen><attachid/><emoticonmd5/><fileext/><aeskey/></appattach><webviewshared><publisherId/><publisherReqId>0</publisherReqId></webviewshared><weappinfo><pagepath/><username/><appid/><appservicetype>0</appservicetype></weappinfo><websearch/><songalbumurl>{cover_url}</songalbumurl></appmsg><fromusername>{wxid}</fromusername>";
 
     public MusicListener(Plugin plugin) {
         super(plugin);
@@ -26,7 +26,7 @@ public class MusicListener extends EventListener<MessageEvent<TextMessage>, Text
 
     @Override
     public boolean support(@NonNull MessageEvent<TextMessage> event, TextMessage source) {
-        return source.getContent().split(" ").length == 2 && ReUtil.contains("^(音乐|点歌) ", source.getContent());
+        return source.getContent().split(" ").length == 2 && ReUtil.contains("^(音乐|点歌|music) ", source.getContent());
     }
 
     @Override
@@ -39,7 +39,8 @@ public class MusicListener extends EventListener<MessageEvent<TextMessage>, Text
                 "music_url", json.getString("music_url").split("\\?")[0],
                 "cover_url", json.getString("cover"),
                 "lyric", json.getString("lrc"),
-                "wxid", source.getReceiver().getId()
+                "wxid", source.getReceiver().getId(),
+                "provider", Provider.get()
         );
         var msg = new MusicMessage();
         msg.setTitle(data.getString("title"));

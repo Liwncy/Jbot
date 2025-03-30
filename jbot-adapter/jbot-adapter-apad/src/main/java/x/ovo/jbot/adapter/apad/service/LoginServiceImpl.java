@@ -60,10 +60,14 @@ public enum LoginServiceImpl implements LoginService {
                 // 重连失败，尝试弹窗登录
                 this.dialogLogin()
                         .onSuccess(uuid -> this.check(promise, uuid))
-                        .transform((s, t) -> {
+                        .onFailure(t -> {
                             log.info("弹窗登录失败：{}", t.getMessage());
-                            return this.ScanQrLogin();
+                            this.ScanQrLogin();
                         });
+//                        .transform((s, t) -> {
+//                            log.info("弹窗登录失败：{}", t.getMessage());
+//                            return this.ScanQrLogin();
+//                        });
             }));
         });
     }
@@ -77,20 +81,20 @@ public enum LoginServiceImpl implements LoginService {
                         promise.fail(t.getMessage());
                     }).onSuccess(check -> {
                         log.debug(JsonObject.mapFrom(check).encodePrettily());
-                        // 如果二维码到期了，取消定时器
-                        if (Objects.isNull(check.getExpiredTime()) || check.getExpiredTime() <= 0) {
-                            Context.vertx.cancelTimer(id);
-                            log.info("二维码已过期，请重新扫码登录");
-                            promise.complete();
-                            return;
-                        }
                         log.info("[{}] 登录状态：{}", check.getNickName(), QrcodeCheckStatus.of(check.getStatus()).getDesc());
                         // 如果登录成功，则取消定时器，开启自动心跳
-                        if (check.getStatus() == 2) {
+                        if (QrcodeCheckStatus.of(check.getStatus()) == QrcodeCheckStatus.SUCCESS) {
                             Context.vertx.cancelTimer(id);
                             this.autoHeartbeat(check.getLoginInfo().getWxid());
                             APadAdapter.getConfig().put("wxid", check.getLoginInfo().getWxid());
                             APadAdapter.saveConfig();
+                            promise.complete();
+                            return;
+                        }
+                        // 如果二维码到期了，取消定时器
+                        if (Objects.isNull(check.getExpiredTime()) || check.getExpiredTime() <= 0) {
+                            Context.vertx.cancelTimer(id);
+                            log.info("二维码已过期，请重新扫码登录");
                             promise.complete();
                         }
                     });
@@ -100,15 +104,13 @@ public enum LoginServiceImpl implements LoginService {
 
     @Override
     public Future<QrcodeDTO> getQrcode() {
-        var name = Util.generateDeviceName();
-        var id = Util.generateDeviceID(name);
-        APadAdapter.getConfig().put("deviceId", id);
-        APadAdapter.getConfig().put("deviceName", name);
-        APadAdapter.saveConfig();
+        var name = APadAdapter.getConfig().getString("deviceName", Util.generateDeviceName());
+        var id = APadAdapter.getConfig().getString("deviceId", Util.generateDeviceID(name));
         var body = JsonObject.of(
                 "DeviceID", id,
                 "DeviceName", name
         );
+        if (StrUtil.isNotBlank(APadAdapter.getConfig().getString("wxid"))) body.put("Wxid", APadAdapter.getConfig().getString("wxid"));
         return ApiUtil.post("/GetQRCode", body)
                 .map(res -> res.getJsonObject("Data"))
                 .map(data -> QrcodeDTO.builder()
@@ -116,7 +118,7 @@ public enum LoginServiceImpl implements LoginService {
                         .qrData(data.getString("QRCodeURL"))
                         .imgBase64(data.getString("QRCodeBase64"))
                         .build()
-                );
+                ).onSuccess(v -> APadAdapter.saveConfig());
     }
 
     @Override
